@@ -1,0 +1,132 @@
+﻿@model IEnumerable<BookStore.Models.Book>
+@{
+    ViewData["Title"] = "Veikals";
+}
+<div class="row">
+    <div class="col-12 col-md-3">
+        <form asp-action="Index" class="modern-filter-form">
+            <div class="modern-filter-container">
+                <h5 class="modern-filter-title">Meklēšanas iespējas</h5>
+                <div class="modern-filter-group">
+                    <input type="text" name="searchString" placeholder="Nosaukums vai Autors" class="modern-filter-input" />
+                </div>
+                <div class="modern-filter-group">
+                    <label for="price-range">Cenas diapazons:</label>
+                    <div id="price-range" class="modern-price-range"></div>
+                    <input type="hidden" id="minPrice" name="minPrice" />
+                    <input type="hidden" id="maxPrice" name="maxPrice" />
+                </div>
+                <div class="modern-filter-group">
+                    <select name="language" class="modern-filter-input">
+                        <option value="">Visas valodas</option>
+                        <option value="Angļu">Angļu</option>
+                        <option value="Latviešu">Latviešu</option>
+                        <option value="Krievu">Krievu</option>
+                    </select>
+                </div>
+                <div class="modern-filter-actions">
+                    <input type="submit" value="Filtrēt" class="modern-filter-button primary" />
+                    <a asp-action="Index" class="modern-filter-button secondary">Notīrīt</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 col-md-9">
+        <div class="row">
+            @foreach (var Book in Model)
+            {
+                <div class="col-12 col-sm-6 col-md-4">
+                    <div class="card my-2 store-card">
+                        <a class="a-cleanup" asp-controller="Store" asp-action="Details" asp-route-id="@Book.Id">
+                            <img src="@Book.ImageUrl" class="card-img-top card-img-custom">
+                            <div class="card-body" style="height: 4.5em;">
+                                <h4 class="mb-2 book-title">@Book.Title, @Book.Author</h4>
+                            </div>
+                            <div class="card-body">
+                                <span class="card-text book-price" style="font-size: 1.1rem;">@Book.Price.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</span>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Book.Id" class="btn btn-primary float-end store-btn"><i class="fa-solid fa-cart-shopping"></i></a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:void(0);" class="btn btn-primary float-end store-btn" onclick="showAuthModal()"><i class="fa-solid fa-cart-shopping"></i></a>
+                                }
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-primary text-white">
+                    <h5 class="modal-title" id="authModalLabel">
+                        <i class="fas fa-exclamation-circle me-2"></i>Nepieciešama autorizācija
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">
+                        <i class="fas fa-info-circle text-primary me-2"></i>
+                        Lai grāmatu pievienotu grozam, Jums ir jābūt autorizētam.
+                    </p>
+                    <p class="text-muted">
+                        Lūdzu, autorizējaties vai reģistrējieties, lai turpinātu.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Aizvērt
+                    </button>
+                    <a href="/Identity/Account/Login" class="modal-btn-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Autorizēties
+                    </a>
+                    <a href="/Identity/Account/Register" class="modal-btn-success">
+                        <i class="fas fa-user-plus me-2"></i>Reģistrācija
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showAuthModal() {
+            const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+            authModal.show();
+        }
+    </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const priceRange = document.getElementById('price-range');
+        const minPriceInput = document.getElementById('minPrice');
+        const maxPriceInput = document.getElementById('maxPrice');
+
+        noUiSlider.create(priceRange, {
+            start: [0, 150], 
+            connect: true, 
+            range: {
+                'min': 0, 
+                'max': 150 
+            },
+            step: 1, 
+            tooltips: true, 
+            format: {
+                to: function (value) {
+                    return Math.round(value);
+                },
+                from: function (value) {
+                    return Number(value); 
+                }
+            }
+        });
+        priceRange.noUiSlider.on('update', function (values, handle) {
+            const minPrice = values[0];
+            const maxPrice = values[1];
+            minPriceInput.value = minPrice;
+            maxPriceInput.value = maxPrice;
+        });
+    });
+</script>

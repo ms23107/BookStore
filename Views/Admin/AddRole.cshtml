@@ -1,0 +1,42 @@
+﻿@model BookStore.ViewModel.AddRoleViewModel
+
+@{
+    ViewData["Title"] = "Pievienot tiesības";
+}
+
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Pievienot tiesības</h2>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddRole" method="post">
+                <div class="form-group mb-3">
+                    <label asp-for="RoleName" class="form-label">Nosaukums</label>
+                    <input asp-for="RoleName" class="form-control" placeholder="Ievadiet nosaukumu" />
+                    <span asp-validation-for="RoleName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-plus"></i> Pievienot
+                    </button>
+                    <a asp-action="ListAllRoles" class="btn btn-warning">
+                        <i class="fa-solid fa-arrow-left"></i> Atpakaļ
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0;
+    }
+</style>

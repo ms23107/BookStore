@@ -1,0 +1,69 @@
+﻿@model BookStore.Models.Cart
+
+<h1 class="my-4 text-center">Grozs</h1>
+
+@if (Model.CartItems.Count > 0)
+{
+    <div class="cart-container">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Nosaukums</th>
+                    <th>Cena</th>
+                    <th>Daudzums</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    var bookTotal = item.Book.Price * item.Quantity;
+                    <tr>
+                        <td>
+                            <a class="a-cleanup" asp-controller="Store" asp-action="Details" asp-route-id="@item.Book.Id">
+                                <img src="@item.Book.ImageUrl" class="cart-item-image" />
+                            </a>
+                        </td>
+                        <td>
+                            <a class="a-cleanup" asp-controller="Store" asp-action="Details" asp-route-id="@item.Book.Id">@item.Book.Title</a>
+                        </td>
+                        <td>
+                            @bookTotal.ToString("C", new System.Globalization.CultureInfo("fr-FR"))
+                        </td>
+                        <td class="quantity-actions">
+                            <a asp-controller="Cart" asp-action="ReduceQuantity" asp-route-id="@item.Book.Id" class="btn btn-outline-secondary"><i class="fa-solid fa-minus"></i></a>
+                            <span class="badge bg-primary">@item.Quantity</span>
+                            <a asp-controller="Cart" asp-action="IncreaseQuantity" asp-route-id="@item.Book.Id" class="btn btn-outline-secondary"><i class="fa-solid fa-plus"></i></a>
+                        </td>
+                        <td>
+                            <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.Book.Id" class="text-danger"><i class="fa-solid fa-xmark"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td class="text-end">
+                        <strong>Kopā:</strong>
+                    </td>
+                    <td>
+                        <strong>@Model?.GetCartTotal().ToString("C", new System.Globalization.CultureInfo("fr-FR"))</strong>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="cart-actions">
+            <a asp-controller="Order" asp-action="Checkout" class="btn btn-success"><i class="fa-solid fa-cart-shopping"></i> Pasūtīt</a>
+            <a asp-controller="Cart" asp-action="ClearCart" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Iztukšot grozu</a>
+        </div>
+    </div>
+}
+else
+{
+    <h3 class="text-center">Grozs ir tukšs</h3>
+}

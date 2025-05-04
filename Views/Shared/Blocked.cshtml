@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Konts bloķēts";
+}
+
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Jūsu konts ir bloķēts!</h4>
+    <p>
+        Lūdzu, sazinieties ar administratoru - bookstorefromlv@gmail.com, lai atbloķētu savu kontu.
+    </p>
+</div>
+
+<form asp-controller="Account" asp-action="Logout" method="post">
+    <button type="submit" class="btn btn-primary">Izlogoties</button>
+</form>

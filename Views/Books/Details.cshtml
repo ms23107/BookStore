@@ -1,0 +1,103 @@
+﻿@model BookStore.Models.Book
+
+@{
+    ViewData["Title"] = "Apraksts";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-lg">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="mb-0">Grāmatas apraksts</h1>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3 text-blue">Nosaukums</dt>
+                        <dd class="col-sm-9 text-black">@Html.DisplayFor(model => model.Title)</dd>
+
+                        <dt class="col-sm-3 text-blue">Apraksts</dt>
+                        <dd class="col-sm-9 text-black">@Html.DisplayFor(model => model.Description)</dd>
+
+                        <dt class="col-sm-3 text-blue">Valoda</dt>
+                        <dd class="col-sm-9 text-black">@Html.DisplayFor(model => model.Language)</dd>
+
+                        <dt class="col-sm-3 text-blue">Žanrs</dt>
+                        <dd class="col-sm-9 text-black">@Html.DisplayFor(model => model.Genre)</dd>
+
+                        <dt class="col-sm-3 text-blue">Izdevējs</dt>
+                        <dd class="col-sm-9 text-black">@Html.DisplayFor(model => model.Manufacturer)</dd>
+
+                        <dt class="col-sm-3 text-blue">ISBN</dt>
+                        <dd class="col-sm-9 text-black">@Html.DisplayFor(model => model.ISBN)</dd>
+
+                        <dt class="col-sm-3 text-blue">Publicēšanas datums</dt>
+                        <dd class="col-sm-9 text-black">@Html.DisplayFor(model => model.DatePublished)</dd>
+
+                        <dt class="col-sm-3 text-blue">Cena (€)</dt>
+                        <dd class="col-sm-9 text-black">@Model.Price.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</dd>
+
+                        <dt class="col-sm-3 text-blue">Autors</dt>
+                        <dd class="col-sm-9 text-black">@Html.DisplayFor(model => model.Author)</dd>
+
+                        <dt class="col-sm-3 text-blue">Attēla URL</dt>
+                        <dd class="col-sm-9 text-black">@Html.DisplayFor(model => model.ImageUrl)</dd>
+                    </dl>
+                </div>
+                <div class="card-footer bg-white text-center">
+                    <a asp-action="Index" class="btn btn-secondary gradient-button">
+                        <i class="fa-solid fa-arrow-left"></i> Atpakaļ uz sarakstu
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary gradient-button">
+                        <i class="fa-solid fa-pen-to-square"></i> Rediģēt
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .card {
+        border-radius: 12px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    .text-blue {
+        color: #2575fc;
+    }
+
+    .text-black {
+        color: #000000;
+    }
+    .gradient-button {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+        .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 8px rgba(13, 110, 253, 0.25);
+        }
+
+    .form-label {
+        font-weight: 600;
+    }
+</style>

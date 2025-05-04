@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h3 class="mb-0">Dzēst tiesības "@Model.Name"</h3>
+        </div>
+        <div class="card-body">
+            <h6>Šo darbību nevar atsaukt</h6>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <form method="post" asp-action="ConfirmDelete" asp-route-id="@Model.Id">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa-solid fa-trash-can"></i> Izdzēst
+                </button>
+                <a asp-action="ListAllRoles" class="btn btn-warning">
+                    <i class="fa-solid fa-ban"></i> Atcelt
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0;
+    }
+</style>

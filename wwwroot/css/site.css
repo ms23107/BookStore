@@ -1,0 +1,104 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Gradient Background for Modal Header */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+}
+
+/* White Close Button for Dark Header */
+.btn-close-white {
+    filter: invert(1);
+}
+
+/* Modal Content Styling */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom: none;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-top: none;
+}
+
+/* Unique Button Styles */
+.modal-btn-primary,
+.modal-btn-success,
+.modal-btn-secondary {
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-btn-primary {
+    background-color: #2575fc;
+}
+
+    .modal-btn-primary:hover {
+        background-color: #1a5bbf;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        color: white;
+    }
+
+.modal-btn-success {
+    background-color: #28a745;
+}
+
+    .modal-btn-success:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        color: white;
+    }
+
+.modal-btn-secondary {
+    background-color: #6c757d;
+}
+
+    .modal-btn-secondary:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        color: white;
+    }

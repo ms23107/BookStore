@@ -1,0 +1,101 @@
+﻿@model Order
+
+@{
+    ViewData["Title"] = "Pasūtījuma detaļas";
+}
+<div class="container-fluid">
+    <div class="card shadow-sm border-0 rounded-lg">
+        <div class="card-header bg-primary text-white">
+            <h1 class="mb-0">Pasūtījuma detaļas</h1>
+        </div>
+        <div class="card-body">
+            <div class="order-summary mb-4">
+                <h4 class="text-primary">Pasūtījuma numurs: <span class="text-dark">@Model.Id</span></h4>
+                <p class="mb-1"><strong>Pasūtījuma datums:</strong> @Model.OrderPlaced.ToString("g")</p>
+                <p class="mb-0"><strong>Kopējā summa:</strong> @Model.OrderTotal.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</p>
+            </div>
+
+            <h3 class="mb-3 text-primary">Pasūtītās grāmatas</h3>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Grāmata</th>
+                            <th>Daudzums</th>
+                            <th>Cena</th>
+                            <th>Kopā</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <tr class="table-row">
+                                <td>@item.Book.Title</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Price.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</td>
+                                <td>@((item.Quantity * item.Price).ToString("C", new System.Globalization.CultureInfo("fr-FR")))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white text-center">
+            <a asp-action="OrderList" class="btn btn-secondary gradient-button">Atgriezties uz pasūtījumu sarakstu</a>
+        </div>
+    </div>
+</div>
+<style>
+    .card {
+        border-radius: 12px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .order-summary {
+        background: rgba(0, 123, 255, 0.05);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 123, 255, 0.1);
+    }
+
+    .order-summary h4 {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .order-summary p {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .table-header {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: white;
+    }
+
+    .table-row:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    .gradient-button {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .gradient-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-footer {
+        text-align: center;
+    }
+</style>

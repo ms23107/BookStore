@@ -1,0 +1,78 @@
+﻿@model IEnumerable<BookStore.Models.Book>
+
+@{
+    ViewData["Title"] = "Galvenā";
+}
+
+<div class="home-page-container">
+    <div class="home-content-wrapper">
+        <div class="home-hero-section text-center py-5">
+            <h1 class="home-hero-title">Laipni lūdzam mūsu grāmatu veikalā</h1>
+            <p class="home-hero-subtitle">Atklājiet labākās grāmatas mūsu kolekcijā</p>
+            <a asp-controller="Store" asp-action="Index" class="btn btn-primary btn-lg home-hero-button">Apskatīt visas grāmatas</a>
+        </div>
+        <div class="home-featured-books mt-5">
+            <h2 class="home-section-title">Ieteiktās grāmatas</h2>
+            <div class="home-scrollable-books" id="scrollable-books">
+                <div class="home-book-list">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var book in Model)
+                        {
+                            <div class="home-book-card">
+                                <a asp-controller="Store" asp-action="Details" asp-route-id="@book.Id">
+                                    <img src="@book.ImageUrl" alt="@book.Title" class="home-book-image">
+                                    <div class="home-book-details">
+                                        <h5 class="home-book-title">@book.Title</h5>
+                                        <p class="home-book-author">@book.Author</p>
+                                        <p class="home-book-price">@book.Price.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</p>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Nav ieteikumu.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const scrollContainer = document.getElementById('scrollable-books');
+        let isDragging = false;
+        let startX, scrollLeft;
+
+        scrollContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.pageX - scrollContainer.offsetLeft;
+            scrollLeft = scrollContainer.scrollLeft;
+            scrollContainer.style.cursor = 'grabbing';
+        });
+
+        scrollContainer.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                isDragging = false;
+                scrollContainer.style.cursor = 'grab';
+            }
+        });
+
+        scrollContainer.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                scrollContainer.style.cursor = 'grab';
+            }
+        });
+
+        scrollContainer.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - scrollContainer.offsetLeft;
+            const walk = (x - startX) * 2;
+            scrollContainer.scrollLeft = scrollLeft - walk;
+        });
+    });
+</script>

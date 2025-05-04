@@ -1,0 +1,173 @@
+﻿@model List<DefaultUser>
+
+@{
+    ViewData["Title"] = "Lietotāju saraksts";
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
+    string searchTerm = ViewBag.SearchTerm;
+}
+
+@using (Html.BeginForm("UserList", "Admin", FormMethod.Get, new { id = "searchForm" }))
+{
+    <div class="d-flex justify-content-center my-4">
+        <div class="input-group glassmorphism" style="max-width: 400px;">
+            <input type="text"
+                   class="form-control glassmorphism-input"
+                   id="searchTerm"
+                   name="searchTerm"
+                   placeholder="Meklēt pēc e-pasta"
+                   value="@searchTerm">
+            <button type="submit" class="btn btn-primary glassmorphism-button">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </div>
+}
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-header">
+            <tr>
+                <th>E-pasts</th>
+                <th>Vārds</th>
+                <th>Uzvārds</th>
+                <th>Adrese</th>
+                <th>Pilsēta</th>
+                <th>Pasta indekss</th>
+                <th>Darbības</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr class="table-row">
+                    <td>@user.Email</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Address</td>
+                    <td>@user.City</td>
+                    <td>@user.ZipCode</td>
+                    <td>
+                        <form asp-action="Block" method="post" class="block-form">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button type="submit" class="btn btn-block @(user.IsBlocked ? "btn-success" : "btn-danger") gradient-button">
+                                @(user.IsBlocked ? "Atbloķēt" : "Bloķēt")
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<nav aria-label="Page navigation" class="my-4">
+    <ul class="pagination justify-content-center">
+        @if (currentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link pagination-button" href="@Url.Action("UserList", new { page = currentPage - 1, searchTerm = searchTerm })">Previous</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(i == currentPage ? "active" : "")">
+                <a class="page-link pagination-button" href="@Url.Action("UserList", new { page = i, searchTerm = searchTerm })">@i</a>
+            </li>
+        }
+
+        @if (currentPage < totalPages)
+        {
+            <li class="page-item">
+                <a class="page-link pagination-button" href="@Url.Action("UserList", new { page = currentPage + 1, searchTerm = searchTerm })">Next</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<style>
+    .glassmorphism {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .glassmorphism-input {
+        background: transparent;
+        border: none;
+        color: #333;
+    }
+
+        .glassmorphism-input:focus {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+    .glassmorphism-button {
+        border: none;
+        border-radius: 0 10px 10px 0;
+    }
+
+    .table-header {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: white;
+    }
+
+    .table-row:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+        transition: background-color 0.2s;
+    }
+    .gradient-button {
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    .btn-success {
+        background: linear-gradient(135deg, #28a745, #218838);
+    }
+    .pagination-button {
+        margin: 0 5px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        color: #333;
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+        .pagination-button:hover {
+            background-color: #6a11cb;
+            color: white;
+        }
+
+    .page-item.active .pagination-button {
+        background-color: #6a11cb;
+        color: white;
+        border-color: #6a11cb;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const blockForms = document.querySelectorAll(".block-form");
+
+        blockForms.forEach(form => {
+            form.addEventListener("submit", function (e) {
+                const button = form.querySelector(".gradient-button");
+                button.classList.remove("btn-danger");
+                button.classList.add("btn-success");
+                button.textContent = "Atbloķēt"; 
+            });
+        });
+    });
+</script>

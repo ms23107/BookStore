@@ -1,0 +1,54 @@
+﻿@using BookStore.ViewModel
+@model List<UserRoleViewModel>
+
+@{
+    var roleId = ViewData["roleId"];
+    var roleName = ViewData["roleName"];
+}
+
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Rediģēt lietotājus ar tiesībām "@roleName"</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <div class="form-check my-2">
+                        <input type="hidden" asp-for="@Model[i].Id" />
+                        <input type="hidden" asp-for="@Model[i].Name" />
+                        <input asp-for="@Model[i].isSelected" class="form-check-input" />
+                        <label class="form-check-label" asp-for="@Model[i].isSelected">
+                            @Model[i].Name
+                        </label>
+                    </div>
+                }
+                <div class="mt-4">
+                    <a asp-action="EditRole" asp-route-id="@roleId" class="btn btn-warning">
+                        <i class="fa-solid fa-arrow-left"></i> Atpakaļ
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa-solid fa-check"></i> Rediģēt
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .form-check-input {
+        margin-top: 0.3rem;
+    }
+</style>

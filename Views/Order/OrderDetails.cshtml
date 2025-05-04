@@ -1,0 +1,38 @@
+﻿@model Order
+
+@{
+    ViewData["Title"] = "Pasūtījuma detaļas";
+}
+
+<h1>Pasūtījuma detaļas</h1>
+
+<div>
+    <h4>Pasūtījuma numurs: @Model.Id</h4>
+    <p><strong>Pasūtījuma datums:</strong> @Model.OrderPlaced.ToString("g")</p>
+    <p><strong>Kopējā summa:</strong> @Model.OrderTotal.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</p>
+</div>
+
+<h3>Pasūtītās grāmatas</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Grāmata</th>
+            <th>Daudzums</th>
+            <th>Cena</th>
+            <th>Kopā</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Book.Title</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</td>
+                <td>@((item.Quantity * item.Price).ToString("C", new System.Globalization.CultureInfo("fr-FR")))</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="OrderHistory" class="btn btn-secondary">Atgriezties uz pasūtījumu vēsturi</a>

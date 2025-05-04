@@ -1,0 +1,147 @@
+﻿@model BookStore.Models.Book
+
+@{
+    ViewData["Title"] = "Izveidot";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-lg">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="mb-0">Izveidot jaunu grāmatu</h1>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Title" class="form-label text-blue">Nosaukums</label>
+                            <input asp-for="Title" class="form-control" placeholder="Ievadiet grāmatas nosaukumu" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="form-label text-blue">Apraksts</label>
+                            <textarea asp-for="Description" class="form-control" cols="40" rows="5" placeholder="Ievadiet grāmatas aprakstu"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Language" class="form-label text-blue">Valoda</label>
+                            <input asp-for="Language" class="form-control" placeholder="Ievadiet valodu" />
+                            <span asp-validation-for="Language" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Genre" class="form-label text-blue">Žanrs</label>
+                            <input asp-for="Genre" class="form-control" placeholder="Ievadiet žanru" />
+                            <span asp-validation-for="Genre" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Manufacturer" class="form-label text-blue">Izdevējs</label>
+                            <input asp-for="Manufacturer" class="form-control" placeholder="Ievadiet izdevēju" />
+                            <span asp-validation-for="Manufacturer" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="ISBN" class="form-label text-blue">ISBN</label>
+                            <input asp-for="ISBN" class="form-control" placeholder="Ievadiet ISBN" />
+                            <span asp-validation-for="ISBN" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="DatePublished" class="form-label text-blue">Publicēšanas datums</label>
+                            <input asp-for="DatePublished" class="form-control" />
+                            <span asp-validation-for="DatePublished" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Price" class="form-label text-blue">Cena (€)</label>
+                            <input asp-for="Price" class="form-control"
+                                   placeholder="Ievadiet cenu"
+                                   min="0.01"
+                                   step="0.01"
+                                   oninput="this.value = Math.abs(this.value)" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Author" class="form-label text-blue">Autors</label>
+                            <input asp-for="Author" class="form-control" placeholder="Ievadiet autoru" />
+                            <span asp-validation-for="Author" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="ImageUrl" class="form-label text-blue">Attēla URL</label>
+                            <input asp-for="ImageUrl" class="form-control" placeholder="Ievadiet attēla URL" />
+                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary gradient-button">
+                                <i class="fa-solid fa-plus"></i> Izveidot
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-white text-center">
+                    <a asp-action="Index" class="btn btn-secondary gradient-button">
+                        <i class="fa-solid fa-arrow-left"></i> Atpakaļ uz sarakstu
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 12px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    .text-blue {
+        color: #2575fc;
+    }
+
+    .text-black {
+        color: white; 
+    }
+    .gradient-button {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+        .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 8px rgba(13, 110, 253, 0.25);
+        }
+
+    .form-label {
+        font-weight: 600;
+    }
+</style>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

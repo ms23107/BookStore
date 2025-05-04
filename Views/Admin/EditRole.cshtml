@@ -1,0 +1,78 @@
+﻿@model BookStore.ViewModel.EditRoleViewModel
+
+@{
+    ViewData["Title"] = "Rediģēt tiesības";
+}
+
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Rediģēt tiesības</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="Id" class="form-label">Numurs</label>
+                        <input asp-for="Id" disabled class="form-control" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="RoleName" class="form-label">Nosaukums</label>
+                        <input asp-for="RoleName" class="form-control" />
+                        <span asp-validation-for="RoleName" class="text-danger"></span>
+                    </div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <a asp-action="ListAllRoles" class="btn btn-warning">
+                            <i class="fa-solid fa-arrow-left"></i> Atpakaļ
+                        </a>
+                        <button type="submit" class="btn btn-success float-end">
+                            <i class="fa-solid fa-check-double"></i> Rediģēt
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3>Lietotāji ar @Model.RoleName tiesībām</h3>
+                    <table class="table table-striped">
+                        @if (Model.Users.Any())
+                        {
+                            foreach (var user in Model.Users)
+                            {
+                                <tr>
+                                    <td>@user</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>Nav lietotāju ar @Model.RoleName tiesībām</td>
+                            </tr>
+                        }
+                    </table>
+                    <div>
+                        <a asp-action="EditUsersInRole" asp-route-id="@Model.Id" class="btn btn-primary">
+                            <i class="fa-solid fa-user-plus"></i> Pievienot/Noņemt lietotāja tiesības
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+</style>

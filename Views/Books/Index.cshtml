@@ -1,0 +1,186 @@
+﻿@model IEnumerable<BookStore.Models.Book>
+
+@{
+    ViewData["Title"] = "Grāmatas";
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
+
+    string HasImage(Book book)
+    {
+        if (book.ImageUrl != "" && book.ImageUrl != null)
+        {
+            return "fa-solid fa-check";
+        }
+        else
+        {
+            return "fa-solid fa-x";
+        }
+    }
+}
+
+<!-- Search Form with Glassmorphism Effect -->
+@using (Html.BeginForm("Index", "Books", FormMethod.Get, new { id = "searchForm" }))
+{
+    <div class="d-flex justify-content-center my-4">
+        <div class="input-group glassmorphism" style="max-width: 400px;">
+            <input type="text"
+                   class="form-control glassmorphism-input"
+                   id="searchTerm"
+                   name="searchTerm"
+                   placeholder="Meklēt..."
+                   value="@ViewBag.SearchTerm">
+            <button type="submit" class="btn btn-primary glassmorphism-button">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </div>
+}
+<p class="text-center">
+    <a asp-action="Create" class="btn btn-primary gradient-button">
+        <i class="fa-solid fa-book"></i> Pievienot
+    </a>
+</p>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-header">
+            <tr>
+                <th class="text-blue">Nosaukums</th>
+                <th class="text-blue">Autors</th>
+                <th class="text-blue">Valoda</th>
+                <th class="text-blue">Žanrs</th>
+                <th class="text-blue">ISBN</th>
+                <th class="text-blue">Publicēšanas datums</th>
+                <th class="text-blue">Cena (€)</th>
+                <th class="text-blue">Vai ir attēls</th>
+                <th class="text-blue">Darbības</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="table-row">
+                    <td class="text-black">@Html.DisplayFor(modelItem => item.Title)</td>
+                    <td class="text-black">@Html.DisplayFor(modelItem => item.Author)</td>
+                    <td class="text-black">@Html.DisplayFor(modelItem => item.Language)</td>
+                    <td class="text-black">@Html.DisplayFor(modelItem => item.Genre)</td>
+                    <td class="text-black">@Html.DisplayFor(modelItem => item.ISBN)</td>
+                    <td class="text-black">@item.DatePublished.ToShortDateString()</td>
+                    <td class="text-black">@item.Price.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</td>
+                    <td class="text-black">
+                        <i class="@HasImage(item)"></i>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary gradient-button"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success gradient-button"><i class="fa-solid fa-circle-info"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger gradient-button"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<nav aria-label="Page navigation" class="my-4">
+    <ul class="pagination justify-content-center">
+        @if (currentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link pagination-button" href="@Url.Action("Index", new { page = currentPage - 1, searchTerm = ViewBag.SearchTerm })">Previous</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(i == currentPage ? "active" : "")">
+                <a class="page-link pagination-button" href="@Url.Action("Index", new { page = i, searchTerm = ViewBag.SearchTerm })">@i</a>
+            </li>
+        }
+
+        @if (currentPage < totalPages)
+        {
+            <li class="page-item">
+                <a class="page-link pagination-button" href="@Url.Action("Index", new { page = currentPage + 1, searchTerm = ViewBag.SearchTerm })">Next</a>
+            </li>
+        }
+    </ul>
+</nav>
+<style>
+    .glassmorphism {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .glassmorphism-input {
+        background: transparent;
+        border: none;
+        color: #333;
+    }
+
+        .glassmorphism-input:focus {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+    .glassmorphism-button {
+        border: none;
+        border-radius: 0 10px 10px 0;
+    }
+    .table-header {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: white;
+    }
+
+    .table-row:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+        transition: background-color 0.2s;
+    }
+    .text-blue {
+        color: white;
+    }
+
+    .text-black {
+        color: #000000;
+    }
+    .gradient-button {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    .btn-success {
+        background: linear-gradient(135deg, #28a745, #218838);
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+    }
+    .pagination-button {
+        margin: 0 5px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        color: #333;
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+        .pagination-button:hover {
+            background-color: #6a11cb;
+            color: white;
+        }
+
+    .page-item.active .pagination-button {
+        background-color: #6a11cb;
+        color: white;
+        border-color: #6a11cb;
+    }
+</style>

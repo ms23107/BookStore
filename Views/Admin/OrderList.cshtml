@@ -1,0 +1,190 @@
+﻿@model List<Order>
+
+@{
+    ViewData["Title"] = "Pasūtījumu saraksts";
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
+    string searchTerm = ViewBag.SearchTerm;
+    string selectedStatus = ViewBag.SelectedStatus;
+}
+@using (Html.BeginForm("OrderList", "Admin", FormMethod.Get, new { id = "searchForm" }))
+{
+    <div class="d-flex justify-content-center my-4">
+        <div class="input-group glassmorphism" style="max-width: 600px;">
+            <input type="text"
+                   class="form-control glassmorphism-input"
+                   id="searchTerm"
+                   name="searchTerm"
+                   placeholder="Meklēt pēc e-pasta"
+                   value="@searchTerm">
+            <select name="status" class="form-select glassmorphism-input">
+                <option value="">Visi pasūtījumi</option>
+                <option value="Apstrādē" selected="@(selectedStatus == "Apstrādē")">Apstrādē</option>
+                <option value="Nosūtīts" selected="@(selectedStatus == "Nosūtīts")">Nosūtīts</option>
+                <option value="Piegādāts" selected="@(selectedStatus == "Piegādāts")">Piegādāts</option>
+            </select>
+            <button type="submit" class="btn btn-primary glassmorphism-button">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </div>
+}
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-header">
+            <tr>
+                <th>Nr</th>
+                <th>Lietotāja e-pasts</th>
+                <th>Pasūtījuma datums</th>
+                <th>Kopējā summa</th>
+                <th>Statuss</th>
+                <th>Darbības</th>
+                <th>Informācija</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr class="table-row">
+                    <td>@order.Id</td>
+                    <td>@order.UserEmail</td>
+                    <td>@order.OrderPlaced.ToString("g")</td>
+                    <td>@order.OrderTotal.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</td>
+                    <td>@order.OrderStatus</td>
+                    <td>
+                        <form asp-action="UpdateOrderStatus" method="post">
+                            <input type="hidden" name="orderId" value="@order.Id" />
+                            <select name="status" onchange="this.form.submit()" class="form-select status-dropdown">
+                                <option value="Apstrādē" selected="@(order.OrderStatus == "Apstrādē")">Apstrādē</option>
+                                <option value="Nosūtīts" selected="@(order.OrderStatus == "Nosūtīts")">Nosūtīts</option>
+                                <option value="Piegādāts" selected="@(order.OrderStatus == "Piegādāts")">Piegādāts</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        <a asp-controller="Admin" asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-primary gradient-button">Skatīt detaļas</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<nav aria-label="Page navigation" class="my-4">
+    <ul class="pagination justify-content-center">
+        @if (currentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link pagination-button" href="@Url.Action("OrderList", new { page = currentPage - 1, searchTerm = searchTerm })">Previous</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(i == currentPage ? "active" : "")">
+                <a class="page-link pagination-button" href="@Url.Action("OrderList", new { page = i, searchTerm = searchTerm })">@i</a>
+            </li>
+        }
+
+        @if (currentPage < totalPages)
+        {
+            <li class="page-item">
+                <a class="page-link pagination-button" href="@Url.Action("OrderList", new { page = currentPage + 1, searchTerm = searchTerm })">Next</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<style>
+    .glassmorphism {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .glassmorphism-input {
+        background: transparent;
+        border: none;
+        color: #333;
+    }
+
+        .glassmorphism-input:focus {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+    .glassmorphism-button {
+        border: none;
+        border-radius: 0 10px 10px 0;
+    }
+
+    .table-header {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: white;
+    }
+
+    .table-row:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+        transition: background-color 0.2s;
+    }
+
+    .gradient-button {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    .status-dropdown {
+        width: 140px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+        .status-dropdown:hover {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            border-color: #86b7fe;
+            box-shadow: 0 0 8px rgba(13, 110, 253, 0.25);
+        }
+
+        .status-dropdown:focus {
+            outline: none;
+            border-color: #86b7fe;
+            box-shadow: 0 0 8px rgba(13, 110, 253, 0.5);
+        }
+
+    .pagination-button {
+        margin: 0 5px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        color: #333;
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+        .pagination-button:hover {
+            background-color: #6a11cb;
+            color: white;
+        }
+
+    .page-item.active .pagination-button {
+        background-color: #6a11cb;
+        color: white;
+        border-color: #6a11cb;
+    }
+</style>

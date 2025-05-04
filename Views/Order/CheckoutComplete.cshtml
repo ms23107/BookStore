@@ -1,0 +1,45 @@
+﻿@model BookStore.Models.Order
+
+<h1>Paldies par pasūtījumu!</h1>
+
+<h5 class="mt-5">Pasūtījuma numurs: @Model.Id</h5>
+	<table class="table">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Nosaukums</th>
+				<th>Cena</th>
+				<th>Daudzums</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.OrderItems)
+			{
+				var itemTotal = item.Book.Price * item.Quantity;
+				<tr>
+					<td>
+						<a class="a-cleanup" asp-controller="Store" asp-action="Details" asp-route-id="@item.Id"><img src="@item.Book.ImageUrl" style="height: 4em"></a>
+					</td>
+					<td>
+						<a class="a-cleanup" asp-controller="Store" asp-action="Details" asp-route-id="@item.Id">@item.Book.Title</a>
+					</td>
+					<td>
+						@itemTotal.ToString("C", new System.Globalization.CultureInfo("fr-FR"))
+					</td>
+					<td>
+						@item.Quantity
+					</td>
+				</tr>
+			}
+		</tbody>
+		<tfoot>
+		<td></td>
+		<td class="text-end">
+			<strong>Kopā:</strong>
+		</td>
+		<td>
+		<string>@Model?.OrderTotal.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</string>
+		</td>
+		<td></td>
+		</tfoot>
+	</table>

@@ -1,0 +1,84 @@
+﻿@model List<Order>
+
+@{
+    ViewData["Title"] = "Pasūtījumu vēsture";
+}
+
+<h1>Pasūtījumu vēsture</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Pasūtījuma numurs</th>
+                <th>Pasūtījuma datums</th>
+                <th>Kopējā summa</th>
+                <th>Statuss</th>
+                <th>Informācija</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderPlaced.ToString("g")</td>
+                    <td>@order.OrderTotal.ToString("C", new System.Globalization.CultureInfo("fr-FR"))</td>
+                    <td>
+                        @if (order.OrderStatus == "Apstrādē")
+                        {
+                            <span class="badge status-badge status-processing">Apstrādē</span>
+                        }
+                        else if (order.OrderStatus == "Nosūtīts")
+                        {
+                            <span class="badge status-badge status-sent">Nosūtīts</span>
+                        }
+                        else if (order.OrderStatus == "Piegādāts")
+                        {
+                            <span class="badge status-badge status-delivered">Piegādāts</span>
+                        }
+                        else
+                        {
+                            <span class="badge status-badge status-processing">Apstrādē</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-primary">Skatīt detaļas</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Jums vēl nav neviena pasūtījuma.</p>
+}
+<style>
+    .status-badge {
+        padding: 8px 16px; 
+        border-radius: 20px; 
+        font-size: 14px;
+        font-weight: 500;
+        color: white; 
+        transition: all 0.3s ease;
+    }
+
+    .status-processing {
+        background: linear-gradient(135deg, #ffc107, #ff9800); 
+    }
+
+    .status-sent {
+        background: linear-gradient(135deg, #007bff, #0056b3); 
+    }
+
+    .status-delivered {
+        background: linear-gradient(135deg, #28a745, #1e7e34);
+    }
+
+    .status-badge:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+</style>

@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "Tiesības";
+}
+
+<div class="container">
+
+    <a class="btn btn-primary mb-4" asp-action="AddRole">
+        <i class="fa-solid fa-users"></i> Pievienot
+    </a>
+
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var role in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@role.Name</h5>
+                            <div class="d-flex justify-content-end">
+                                <a asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-sm btn-primary me-2">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <a asp-action="DeleteRole" asp-route-id="@role.Id" class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            <h5>Vēl nav privilēģiju. Izmantojiet augstāk esošo pogu, lai pievienotu savu pirmo privilēģiju.</h5>
+        </div>
+    }
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+</style>
