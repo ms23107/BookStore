@@ -1,2 +1,2 @@
-# Interneta grāmatu veikala sistēma
+# Grāmatu internetveikala sistēma
 Kvalifikācijas darbs
